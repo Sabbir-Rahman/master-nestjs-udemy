@@ -11,41 +11,44 @@ import {
 import { CreateEventDto } from './create-event.dto'
 import { UpdateEventDto } from './update-event.dto'
 import { Event } from './event.entity'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
 @Controller('/events')
 export class EventsController {
   private events: Event[] = []
+  constructor(
+    @InjectRepository(Event)
+    private readonly repository: Repository<Event>,
+  ) {}
 
   @Get()
-  getEvents() {
-    return this.events
+  async findAll() {
+    return await this.repository.find()
   }
 
   @Get(':id')
-  getEvent(@Param('id') id) {
-    return this.events.find((event) => event.id === parseInt(id))
+  async findOne(@Param('id') id) {
+    return await this.repository.findOneBy({ id })
   }
 
   @Post()
-  addEvent(@Body() input: CreateEventDto) {
-    const newEvent: Event = {
+  async create(@Body() input: CreateEventDto) {
+    return await this.repository.save({
       ...input,
       when: new Date(input.when),
-      id: this.events.length + 1,
-    }
-    this.events.push(newEvent)
-    return newEvent
+    })
   }
 
   @Patch(':id')
-  updateEvent(@Param('id') id, @Body() input: UpdateEventDto) {
-    const index = this.events.findIndex((event) => event.id === parseInt(id))
-    this.events[index] = {
-      ...this.events[index],
+  async update(@Param('id') id, @Body() input: UpdateEventDto) {
+    const event = await this.repository.findOneBy({ id })
+
+    return await this.repository.save({
+      ...event,
       ...input,
-      when: input.when ? new Date(input.when) : this.events[index].when,
-    }
-    return this.events[index]
+      when: input.when ? new Date(input.when) : event.when
+    })
   }
 
   @Delete(':id')
