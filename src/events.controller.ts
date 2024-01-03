@@ -8,6 +8,7 @@ import {
   Body,
   HttpCode,
   ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common'
 import { CreateEventDto } from './create-event.dto'
 import { UpdateEventDto } from './update-event.dto'
@@ -49,7 +50,7 @@ export class EventsController {
   }
 
   @Post()
-  async create(@Body() input: CreateEventDto) {
+  async create(@Body(ValidationPipe) input: CreateEventDto) {
     return await this.repository.save({
       ...input,
       when: new Date(input.when),
