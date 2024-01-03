@@ -7,3 +7,7 @@
 ```nest generate module <module_name>
 
 ```
+
+### manage config in nest js
+```npm i --save @nestjs/config
+```
