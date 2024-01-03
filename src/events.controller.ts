@@ -50,7 +50,9 @@ export class EventsController {
   }
 
   @Post()
-  async create(@Body(ValidationPipe) input: CreateEventDto) {
+  async create(
+    @Body(new ValidationPipe({ groups: ['create'] })) input: CreateEventDto,
+  ) {
     return await this.repository.save({
       ...input,
       when: new Date(input.when),
@@ -58,7 +60,10 @@ export class EventsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id, @Body() input: UpdateEventDto) {
+  async update(
+    @Param('id') id,
+    @Body(new ValidationPipe({ groups: ['update'] })) input: UpdateEventDto,
+  ) {
     const event = await this.repository.findOneBy({ id })
 
     return await this.repository.save({

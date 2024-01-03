@@ -8,6 +8,7 @@ export class CreateEventDto {
   description: string
   @IsDateString()
   when: string
-  @Length(5, 255)
+  @Length(5, 255, { groups: ['create'] })
+  @Length(10, 20, { groups: ['update'] })
   address: string
 }
