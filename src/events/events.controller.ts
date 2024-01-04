@@ -11,6 +11,8 @@ import {
   Logger,
   NotFoundException,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common'
 import { CreateEventDto } from './input/create-event.dto'
 import { UpdateEventDto } from './input/update-event.dto'
@@ -34,11 +36,14 @@ export class EventsController {
   ) {}
 
   @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
   async findAll(@Query() filter: ListEvents) {
     this.logger.log('Hit the find all route')
     const events =
-      await this.eventService.getEventsWithAttendeeCountFiltered(filter)
-    this.logger.debug(`Found ${events.length} events`)
+      await this.eventService.getEventsWithAttendeeCountFilteredPaginated(
+        filter,
+        { total: true, currentPage: filter.page, limit: 2 },
+      )
 
     return events
   }
