@@ -9,6 +9,7 @@ import {
   HttpCode,
   ParseIntPipe,
   Logger,
+  NotFoundException,
 } from '@nestjs/common'
 import { CreateEventDto } from './create-event.dto'
 import { UpdateEventDto } from './update-event.dto'
@@ -51,7 +52,11 @@ export class EventsController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.repository.findOneBy({ id })
+    const event = await this.repository.findOneBy({ id })
+    if (!event) {
+      throw new NotFoundException()
+    }
+    return event
   }
 
   @Post()
