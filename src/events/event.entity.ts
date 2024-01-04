@@ -16,4 +16,10 @@ export class Event {
   address: string
   @OneToMany(() => Attendee, (attendee) => attendee.event)
   attendees: Attendee[]
+
+  // This is a virtual column
+  attendeeCount?: number
+  attendeeRejected?: number
+  attendeeMaybe?: number
+  attendeeAccepted?: number
 }
