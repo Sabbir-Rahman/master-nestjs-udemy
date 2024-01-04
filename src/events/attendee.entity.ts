@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 import { Event } from './event.entity'
 
 @Entity()
@@ -15,5 +21,6 @@ export class Attendee {
   //     name:'event_id',
   //     referencedColumnName: 'secondary'
   //   })
+  @JoinColumn()
   event: Event
 }
