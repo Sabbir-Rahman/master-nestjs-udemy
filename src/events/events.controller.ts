@@ -113,7 +113,10 @@ export class EventsController {
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id') id) {
-    const event = await this.repository.findOneBy({ id })
-    await this.repository.remove(event)
+    const result = await this.eventService.deleteEvent(id)
+
+    if (result?.affected === 0) {
+      throw new NotFoundException()
+    }
   }
 }
