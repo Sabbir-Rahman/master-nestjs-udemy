@@ -15,6 +15,9 @@ import {
   ValidationPipe,
   UseGuards,
   ForbiddenException,
+  SerializeOptions,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common'
 import { CreateEventDto } from './input/create-event.dto'
 import { UpdateEventDto } from './input/update-event.dto'
@@ -29,6 +32,8 @@ import { User } from 'src/auth/user.entity'
 import { AuthGuardJwt } from 'src/auth/auth-guard.jwt'
 
 @Controller('/events')
+// By 'excludeAll; Only add @Expose() in event entity will give the response result
+// @SerializeOptions({ strategy: 'excludeAll' })
 export class EventsController {
   private readonly logger = new Logger(EventsController.name)
   private events: Event[] = []
@@ -87,6 +92,7 @@ export class EventsController {
   }
 
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id', ParseIntPipe) id: number) {
     // const event = await this.repository.findOneBy({ id })
     const event = await this.eventService.getEvent(id)
