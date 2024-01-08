@@ -11,3 +11,13 @@
 ### manage config in nest js
 ```npm i --save @nestjs/config
 ```
+
+### install passport
+```npm i --save @nestjs/passport passport passport-local
+   npm i --save-dev @types/passport-local
+```
+
+### install jwr
+```npm i --save @nestjs/jwt passport-jwt
+   npm i --save-dev @types/passport-jwt
+```
