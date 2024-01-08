@@ -1,5 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 import { Attendee } from './attendee.entity'
+import { User } from 'src/auth/user.entity'
 
 @Entity()
 export class Event {
@@ -16,6 +23,12 @@ export class Event {
   address: string
   @OneToMany(() => Attendee, (attendee) => attendee.event)
   attendees: Attendee[]
+
+  @ManyToOne(() => User, (user) => user.organized)
+  organizer: User
+
+  @Column({ nullable: true })
+  organizerId: number
 
   // This is a virtual column
   attendeeCount?: number
