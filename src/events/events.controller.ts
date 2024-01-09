@@ -26,9 +26,9 @@ import { Repository } from 'typeorm'
 import { Attendee } from './attendee.entity'
 import { EventService } from './events.service'
 import { ListEvents } from './list.events'
-import { CurrentUser } from 'src/auth/current-user.decorator'
-import { User } from 'src/auth/user.entity'
-import { AuthGuardJwt } from 'src/auth/auth-guard.jwt'
+import { CurrentUser } from './../auth/current-user.decorator'
+import { User } from './../auth/user.entity'
+import { AuthGuardJwt } from './../auth/auth-guard.jwt'
 
 @Controller('/events')
 // By 'excludeAll; Only add @Expose() in event entity will give the response result

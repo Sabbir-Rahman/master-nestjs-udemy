@@ -4,9 +4,9 @@ import { Event, PaginatedEvents } from './event.entity'
 import { Injectable, Logger } from '@nestjs/common'
 import { AttendeeAnswerEnum } from './attendee.entity'
 import { ListEvents, WhenEventFilter } from './list.events'
-import { PaginateOptions, paginate } from 'src/pagination/paginator'
+import { PaginateOptions, paginate } from './../pagination/paginator'
 import { CreateEventDto } from './input/create-event.dto'
-import { User } from 'src/auth/user.entity'
+import { User } from './../auth/user.entity'
 import { UpdateEventDto } from './input/update-event.dto'
 
 @Injectable()
