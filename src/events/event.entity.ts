@@ -7,6 +7,7 @@ import {
 } from 'typeorm'
 import { Attendee } from './attendee.entity'
 import { User } from 'src/auth/user.entity'
+import { PaginationResult } from 'src/pagination/paginator'
 
 @Entity()
 export class Event {
@@ -36,3 +37,5 @@ export class Event {
   attendeeMaybe?: number
   attendeeAccepted?: number
 }
+
+export type PaginatedEvents = PaginationResult<Event>
