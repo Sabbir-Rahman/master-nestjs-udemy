@@ -15,7 +15,6 @@ import {
   ValidationPipe,
   UseGuards,
   ForbiddenException,
-  SerializeOptions,
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common'
@@ -95,7 +94,7 @@ export class EventsController {
   @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id', ParseIntPipe) id: number) {
     // const event = await this.repository.findOneBy({ id })
-    const event = await this.eventService.getEvent(id)
+    const event = await this.eventService.getEventWithAttendeeCount(id)
     if (!event) {
       throw new NotFoundException()
     }
@@ -115,7 +114,7 @@ export class EventsController {
     @Body() input: UpdateEventDto,
     @CurrentUser() user: User,
   ) {
-    const event = await this.eventService.getEvent(id)
+    const event = await this.eventService.findOne(id)
 
     if (!event) {
       throw new NotFoundException()
@@ -134,7 +133,7 @@ export class EventsController {
   @UseGuards(AuthGuardJwt)
   @HttpCode(204)
   async remove(@Param('id') id, @CurrentUser() user: User) {
-    const event = await this.eventService.getEvent(id)
+    const event = await this.eventService.findOne(id)
     if (!event) {
       throw new NotFoundException()
     }

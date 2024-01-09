@@ -4,9 +4,11 @@ import {
   Query,
   UseInterceptors,
   Get,
+  Controller,
 } from '@nestjs/common'
 import { EventService } from './events.service'
 
+@Controller()
 export class EventsOrganizedByUserController {
   constructor(private readonly eventsService: EventService) {}
 

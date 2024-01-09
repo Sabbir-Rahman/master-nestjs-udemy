@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm'
-import { DeleteResult, Repository } from 'typeorm'
+import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm'
 import { Event, PaginatedEvents } from './event.entity'
 import { Injectable, Logger } from '@nestjs/common'
 import { AttendeeAnswerEnum } from './attendee.entity'
@@ -17,7 +17,7 @@ export class EventService {
     private readonly eventsRepository: Repository<Event>,
   ) {}
 
-  private getEventsBaseQuery() {
+  private getEventsBaseQuery(): SelectQueryBuilder<Event> {
     return this.eventsRepository.createQueryBuilder('e').orderBy('e.id', 'DESC')
   }
 
@@ -53,7 +53,7 @@ export class EventService {
       )
   }
 
-  private async getEventsWithAttendeeCountFiltered(filter?: ListEvents) {
+  private getEventsWithAttendeeCountFilteredQuery(filter?: ListEvents) {
     let query = this.getEventsWithAttendeeCountQuery()
 
     if (!filter) {
@@ -82,7 +82,7 @@ export class EventService {
         )
       }
     }
-    return await query
+    return query
   }
 
   public async getEventsWithAttendeeCountFilteredPaginated(
@@ -90,12 +90,14 @@ export class EventService {
     paginateOptions: PaginateOptions,
   ): Promise<PaginatedEvents> {
     return await paginate(
-      await this.getEventsWithAttendeeCountFiltered(filter),
+      this.getEventsWithAttendeeCountFilteredQuery(filter),
       paginateOptions,
     )
   }
 
-  public async getEvent(id: number): Promise<Event | undefined> {
+  public async getEventWithAttendeeCount(
+    id: number,
+  ): Promise<Event | undefined> {
     const query = this.getEventsWithAttendeeCountQuery().andWhere(
       'e.id = :id',
       { id },
@@ -106,12 +108,18 @@ export class EventService {
     return await query.getOne()
   }
 
+  public async findOne(id: number): Promise<Event | undefined> {
+    return await this.eventsRepository.findOneBy({ id })
+  }
+
   public async createEvent(input: CreateEventDto, user: User): Promise<Event> {
-    return await this.eventsRepository.save({
-      ...input,
-      organizer: user,
-      when: new Date(input.when),
-    })
+    return await this.eventsRepository.save(
+      new Event({
+        ...input,
+        organizer: user,
+        when: new Date(input.when),
+      }),
+    )
   }
 
   public async updateEvent(
