@@ -37,10 +37,7 @@ export class EventsController {
   private readonly logger = new Logger(EventsController.name)
   private events: Event[] = []
   constructor(
-    @InjectRepository(Event)
-    private readonly repository: Repository<Event>,
     @InjectRepository(Attendee)
-    private readonly attendeeRepository: Repository<Attendee>,
     private readonly eventService: EventService,
   ) {}
 
@@ -72,23 +69,23 @@ export class EventsController {
     // })
   }
 
-  @Get('/practice2')
-  async practice2() {
-    // return await this.repository.find({
-    //   where: { id: 1 },
-    //   relations: ['attendees'],
-    // })
-    const event = new Event()
-    event.id = 1
+  // @Get('/practice2')
+  // async practice2() {
+  //   // return await this.repository.find({
+  //   //   where: { id: 1 },
+  //   //   relations: ['attendees'],
+  //   // })
+  //   const event = new Event()
+  //   event.id = 1
 
-    const attendee = new Attendee()
-    attendee.name = 'Jerry'
-    attendee.event = event
+  //   const attendee = new Attendee()
+  //   attendee.name = 'Jerry'
+  //   attendee.event = event
 
-    await this.attendeeRepository.save(attendee)
+  //   await this.attendeeRepository.save(attendee)
 
-    return event
-  }
+  //   return event
+  // }
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
