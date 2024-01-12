@@ -36,10 +36,7 @@ import { AuthGuardJwt } from './../auth/auth-guard.jwt'
 export class EventsController {
   private readonly logger = new Logger(EventsController.name)
   private events: Event[] = []
-  constructor(
-    @InjectRepository(Attendee)
-    private readonly eventService: EventService,
-  ) {}
+  constructor(private readonly eventService: EventService) {}
 
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
